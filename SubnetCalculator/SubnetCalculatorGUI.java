@@ -20,10 +20,12 @@ public class SubnetCalculatorGUI {
     // UI Components (WEST PANEL)
 
 
-//    private String[][] testData = { {"101","Amit","670000"},
-//                                    {"102","Jai","780000"},
-//                                    {"101","Sachin","700000"}};
-//    private String column[] = {"ID","NAME","SALARY"};
+    private static String[][] testData = {{"29/11/2020 21:51","192.168.1.254","255.255.255.0"},
+                                    {"29/11/2020 21:51","192.168.1.253","255.255.0.0"},
+                                    {"29/11/2020 21:51","192.168.1.252","255.0.0.0"},
+                                    {"29/11/2020 21:51","192.168.1.252","255.0.0.0"},
+                                    {"29/11/2020 21:51","192.168.1.252","255.0.0.0"}};
+    private static String column[] = {"Date & Time","IP ADDRESS","SUBNET MASK"};
     public SubnetCalculatorGUI() {
         createGUI();
     }
@@ -49,26 +51,31 @@ public class SubnetCalculatorGUI {
     }
 
     private static void createNorthPanel() {
-        southJPanel = new JPanel();
-        subnetHistoryTable = new JTable();
+        northJPanel = new JPanel();
+        subnetHistoryTable = new JTable(testData, column);
         jTableScrollPane = new JScrollPane(subnetHistoryTable);
+        subnetHistoryTable.setFillsViewportHeight(true);
         jTableScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jTableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        Border southJPanelBorder = BorderFactory.createTitledBorder("Subnet History");
-        jTableScrollPane.setMaximumSize(new Dimension(600, 100));
-        jTableScrollPane.setPreferredSize(new Dimension(0, 50));
-        southJPanel.add(jTableScrollPane);
-        southJPanel.setBorder(southJPanelBorder);
-        guiWindow.getContentPane().add(southJPanel,guiBorderLayout.NORTH);
+        Border northJPanelBorder = BorderFactory.createTitledBorder("Subnet History");
+        jTableScrollPane.setPreferredSize(new Dimension(500, 100));
+
+        northJPanel.add(jTableScrollPane);
+        northJPanel.setBorder(northJPanelBorder);
+        guiWindow.getContentPane().add(northJPanel,guiBorderLayout.NORTH);
     }
 
     private static void createWestPanel() {
         westJPanel = new JPanel();
-        westJPanel.setLayout(new BoxLayout(westJPanel, BoxLayout.Y_AXIS));
-        JLabel networkClassJLabel = new JLabel("Network Class");
+        GridLayout subnetGridLayout = new GridLayout(10, 1, 0, 5);
+        westJPanel.setLayout(subnetGridLayout);
         Border westJPanelBorder = BorderFactory.createTitledBorder("Subnet Information");
         westJPanel.setBorder(westJPanelBorder);
+        JLabel networkClassJLabel = new JLabel("Network Class");
         westJPanel.add(networkClassJLabel);
+        GridLayout subnetClassPanelGrid = new GridLayout(1, 3, 0, 5);
+        JPanel subnetClassPanel = new JPanel();
+        subnetClassPanel.setLayout(subnetClassPanelGrid);
         JRadioButton classA = new JRadioButton("A");
         JRadioButton classB = new JRadioButton("B");
         JRadioButton classC = new JRadioButton("C");
@@ -77,9 +84,10 @@ public class SubnetCalculatorGUI {
         group.add(classA);
         group.add(classB);
         group.add(classC);
-        westJPanel.add(classA);
-        westJPanel.add(classB);
-        westJPanel.add(classC);
+        subnetClassPanel.add(classA);
+        subnetClassPanel.add(classB);
+        subnetClassPanel.add(classC);
+        westJPanel.add(subnetClassPanel);
         JLabel ipAddressLabel = new JLabel("IP Address");
         westJPanel.add(ipAddressLabel);
         JTextField ipAddressTextField = new JTextField(15);
@@ -92,11 +100,14 @@ public class SubnetCalculatorGUI {
         subnetComboBox.setSelectedIndex(2);
         subnetComboBox.setMaximumSize(subnetComboBox.getPreferredSize());
         westJPanel.add(subnetComboBox);
+        JLabel subnetBitsJLabel = new JLabel("Subnet Bits");
+        westJPanel.add(subnetBitsJLabel);
         String subnetBits[] = {"24","16","8"};
         JComboBox subnetBitComboBox = new JComboBox(subnetBits);
         subnetComboBox.setSelectedIndex(2);
         subnetBitComboBox.setMaximumSize(subnetBitComboBox.getPreferredSize());
         westJPanel.add(subnetBitComboBox);
+        westJPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         guiWindow.getContentPane().add(westJPanel,guiBorderLayout.WEST);
     }
 
