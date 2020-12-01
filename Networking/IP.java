@@ -19,12 +19,12 @@ public final class IP {
         return match;
     }
 
-    public static String binaryConversion(String input) {
-
-    }
-
-    public static String hexConversion(String input) {
-
-    }
+//    public static String binaryConversion(String input) {
+//
+//    }
+//
+//    public static String hexConversion(String input) {
+//
+//    }
 
 }
