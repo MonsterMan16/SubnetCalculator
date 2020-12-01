@@ -11,14 +11,15 @@ public class SubnetCalculatorGUI {
     // GUI
     private static JFrame guiWindow;
     // UI
-    private static JPanel subnetHistoryPanel;
-    private static JPanel networkProperies;
-    private static JPanel networkProperiesLPanel;
-    private static JPanel networkProperiesRPanel;
-    // UI Components (NORTH PANEL)
     private static JTable subnetHistoryTable;
     private static JScrollPane jTableScrollPane;
-    // UI Components (WEST PANEL)
+    private static JPanel networkProperies;
+    private static JPanel networkProperiesLRContainer;
+    private static JPanel networkProperiesLPanel;
+    private static JPanel networkProperiesRPanel;
+    private static JPanel networkProperiesBottomPanel;
+
+
 
 
     private static String[][] testData = {{"29/11/2020 21:51","192.168.1.254","255.255.255.0"},
@@ -35,7 +36,7 @@ public class SubnetCalculatorGUI {
 
     private static void createGUI() {
         initialiseUI();
-        guiWindow.pack();
+//        guiWindow.pack();
     }
 
 
@@ -43,10 +44,11 @@ public class SubnetCalculatorGUI {
         //Creating a JFrame
         guiWindow = new JFrame("Subnet Calculator");
         //Setting the JFrame Layout
-        GridLayout guiGridLayout = new GridLayout(3, 1);
+        GridLayout guiGridLayout = new GridLayout(2, 1);
         guiWindow.setLayout(guiGridLayout);
         //Setting the JFrame Size and Default Close Operation
-        guiWindow.setSize(600,400);
+        guiWindow.setSize(600,800);
+        guiWindow.setResizable(false);
         guiWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         // Create UI For GUI
         initialiseGUI();
@@ -59,7 +61,6 @@ public class SubnetCalculatorGUI {
     }
 
     private static void subnetHistoryPanelGUI() {
-
         subnetHistoryTable = new JTable(testData, column);
         jTableScrollPane = new JScrollPane(subnetHistoryTable);
         jTableScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -73,10 +74,18 @@ public class SubnetCalculatorGUI {
 
     private static void networkProperiesGUI() {
         networkProperies = new JPanel();
-        GridLayout guiGridLayout = new GridLayout(1, 2, 5, 0);
-        networkProperies.setLayout(guiGridLayout);
+        Border networkProperiesBorder = BorderFactory.createLineBorder(Color.black);
+        networkProperies.setBorder(networkProperiesBorder);
+        GridLayout gridLayoutNetworkProperies = new GridLayout(2, 1);
+        networkProperies.setLayout(gridLayoutNetworkProperies);
+        networkProperiesLRContainer = new JPanel();
+        GridLayout gridLayoutLRContainer = new GridLayout(1, 2);
+        networkProperiesLRContainer.setLayout(gridLayoutLRContainer);
         networkProperiesLPanelGUI();
         networkProperiesRPanelGUI();
+        networkProperiesBottomPanelGUI();
+        networkProperies.add(networkProperiesLRContainer);
+        networkProperies.add(networkProperiesBottomPanel);
         guiWindow.getContentPane().add(networkProperies);
     }
 
@@ -84,8 +93,8 @@ public class SubnetCalculatorGUI {
         networkProperiesLPanel = new JPanel();
         GridLayout gridLayout = new GridLayout(10, 1);
         networkProperiesLPanel.setLayout(gridLayout);
-        Border westJPanelBorder = BorderFactory.createTitledBorder("TO BE NAMED");
-        networkProperiesLPanel.setBorder(westJPanelBorder);
+        Border networkPropertiesJPanelBorder = BorderFactory.createLineBorder(Color.black);
+        networkProperiesLPanel.setBorder(networkPropertiesJPanelBorder);
         JLabel networkClassJLabel = new JLabel("Network Class");
         networkProperiesLPanel.add(networkClassJLabel);
         JPanel subnetClassPanel = new JPanel();
@@ -123,14 +132,14 @@ public class SubnetCalculatorGUI {
         subnetBitComboBox.setMaximumSize(subnetBitComboBox.getPreferredSize());
         networkProperiesLPanel.add(subnetBitComboBox);
         networkProperiesLPanel.setMaximumSize(networkProperiesLPanel.getPreferredSize());
-        networkProperies.add(networkProperiesLPanel);
+        networkProperiesLRContainer.add(networkProperiesLPanel);
     }
 
     private static void networkProperiesRPanelGUI() {
         GridLayout gridLayout = new GridLayout(10, 1);
         networkProperiesRPanel = new JPanel();
         networkProperiesRPanel.setLayout(gridLayout);
-        Border westJPanelBorder = BorderFactory.createTitledBorder("TO BE NAMED");
+        Border westJPanelBorder = BorderFactory.createLineBorder(Color.black);
         networkProperiesRPanel.setBorder(westJPanelBorder);
         JLabel octetRangeLabel = new JLabel("First Octet Range");
         networkProperiesRPanel.add(octetRangeLabel);
@@ -162,7 +171,46 @@ public class SubnetCalculatorGUI {
         hostsPerSubnetTextField.setEditable(false);
         networkProperiesRPanel.add(hostsPerSubnetTextField);
 
-        networkProperies.add(networkProperiesRPanel);
+        networkProperiesLRContainer.add(networkProperiesRPanel);
+    }
+
+    private static void networkProperiesBottomPanelGUI() {
+        networkProperiesBottomPanel = new JPanel();
+        GridLayout gridLayout1 = new GridLayout(5, 1);
+        networkProperiesBottomPanel.setLayout(gridLayout1);
+        Border BottomPanelBorder = BorderFactory.createLineBorder(Color.black);
+        networkProperiesBottomPanel.setBorder(BottomPanelBorder);
+        JLabel hostAddressRangeLabel = new JLabel("Host Address Range");
+        networkProperiesBottomPanel.add(hostAddressRangeLabel);
+        JTextField hostAddressRangeTextField = new JTextField();
+        hostAddressRangeTextField.setEditable(false);
+        networkProperiesBottomPanel.add(hostAddressRangeTextField);
+
+        JPanel container = new JPanel();
+        GridLayout containerGridLayout = new GridLayout(2, 2);
+        container.setLayout(containerGridLayout);
+
+
+        JLabel subnetIDLabel = new JLabel("Subnet ID");
+        JTextField subnetIDTextField = new JTextField();
+        subnetIDTextField.setEditable(false);
+
+        JLabel broadcastAddressLabel = new JLabel("Broadcast Address");
+        JTextField broadcastAddressTextField = new JTextField();
+        broadcastAddressTextField.setEditable(false);
+        container.add(subnetIDLabel);
+        container.add(broadcastAddressLabel);
+        container.add(subnetIDTextField);
+        container.add(broadcastAddressTextField);
+
+        networkProperiesBottomPanel.add(container);
+
+        JLabel subnetBitmap = new JLabel("Subnet Bitmap");
+        networkProperiesBottomPanel.add(subnetBitmap);
+        JTextField subnetBitmapTextField = new JTextField();
+        subnetBitmapTextField.setEditable(false);
+        networkProperiesBottomPanel.add(subnetBitmapTextField);
+        networkProperies.add(networkProperiesBottomPanel);
     }
 
 }
