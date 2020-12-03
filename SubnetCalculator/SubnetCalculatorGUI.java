@@ -194,7 +194,6 @@ public class SubnetCalculatorGUI {
         JLabel subnetIDLabel = new JLabel("Subnet ID");
         JTextField subnetIDTextField = new JTextField();
         subnetIDTextField.setEditable(false);
-
         JLabel broadcastAddressLabel = new JLabel("Broadcast Address");
         JTextField broadcastAddressTextField = new JTextField();
         broadcastAddressTextField.setEditable(false);
