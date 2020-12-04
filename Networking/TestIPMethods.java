@@ -14,8 +14,13 @@ public class TestIPMethods {
 
         int num = Integer.parseInt(JOptionPane.showInputDialog(null, "Input a number", "IP Input", JOptionPane.QUESTION_MESSAGE));
 
-        JOptionPane.showMessageDialog(null,"Integer in 8Bit Binary form is " + IP.integerToEightBitBinary(num), "IP Address Valid", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null,"Integer in 8Bit Binary form is " + intToBinary(num), "IP Address Valid", JOptionPane.INFORMATION_MESSAGE);
 
+
+    }
+
+    public static String intToBinary(int n)
+    {
 
     }
 }
