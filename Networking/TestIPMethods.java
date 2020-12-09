@@ -1,6 +1,8 @@
 package Networking;
 
 import javax.swing.*;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.util.Arrays;
 
 public class TestIPMethods {
@@ -16,10 +18,9 @@ public class TestIPMethods {
 //        int num = Integer.parseInt(JOptionPane.showInputDialog(null, "Input a number", "IP Input", JOptionPane.QUESTION_MESSAGE));
 //
 //        JOptionPane.showMessageDialog(null,"Integer in 8Bit Binary form is " + intToBinary(num), "IP Address Valid", JOptionPane.INFORMATION_MESSAGE);
-        String ip = "192.168.1.254";
-        int[] ipArray = IP.addressToArray(ip);
-        System.out.println(Arrays.toString(ipArray));
-
+//        String ip = "192.168.1.254";
+        boolean validIP = IP.isValid("255.255.255.254");
+        System.out.println(validIP);
     }
 
 }

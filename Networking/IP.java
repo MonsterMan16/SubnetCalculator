@@ -1,13 +1,11 @@
 package Networking;
 
+import java.util.Arrays;
 import java.util.regex.*;
 
 
 public final class IP {
-    public static final int TYPE_SUBNET = 0;
-    public static final int TYPE_IP = 1;
-    private static final String IPV4_REGEX_OCTET = "(\\d{1,3})";
-    private static final String IPV4_REGEX = "^" + IPV4_REGEX_OCTET + IPV4_REGEX_OCTET + IPV4_REGEX_OCTET + "(\\d{1,3})$";
+    private static final String IPV4_REGEX = "^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-4]?|[3-9]\\d?)$";
 
     public static boolean isValid(String ipAddress) {
         Pattern compiledRegex = Pattern.compile(IPV4_REGEX);
@@ -17,56 +15,110 @@ public final class IP {
         return match;
     }
 
-    public static int[] addressToArray(String ip_address) {
-        int[] addressArray = new int[4];
+    public static String[] addressToArray(String ip_address) {
+        String[] addressArray = new String[4];
           for(int i= 0; i < addressArray.length; i++) {
               if(i == 3) {
-                  addressArray[i] = Integer.parseInt(ip_address.substring(0,ip_address.length()));
+                  addressArray[i] = ip_address.substring(0,ip_address.length());
                   continue;
               }
-              addressArray[i] = Integer.parseInt(ip_address.substring(0,ip_address.indexOf(".")));
+              addressArray[i] = ip_address.substring(0,ip_address.indexOf("."));
               ip_address = ip_address.substring((ip_address.indexOf(".")+1),ip_address.length());
-//              ip_address = ip_address.replace((IPV4_REGEX_OCTET + "\\."),"");
           }
-        return addressArray;
+        return Arrays.copyOf(addressArray,addressArray.length);
     }
 
-//    public static int[] integerArrayToBinaryArray(int[] ip_address) {
+    public static String[] integerArrayToBinaryArray(final String[] ip_address) {
+        String[] eight_bit_binary_address = new String[4];
+        for(int i = 0; i < ip_address.length; i++) {
+            eight_bit_binary_address[i] = IP.integerToEightBitBinary(Integer.parseInt(ip_address[i]));
+        }
+        return eight_bit_binary_address;
+    }
 //
-//    }
+    public static String[] integerArrayToHexidecimalArray(final String[] ip_address) {
+        String[] eight_bit_binary_address = new String[4];
+        for(int i = 0; i < ip_address.length; i++) {
+            eight_bit_binary_address[i] = IP.integerToHexidecimal(Integer.parseInt(ip_address[i]));
+        }
+        return eight_bit_binary_address;
+    }
 //
-//    public static int[] integerArrayToHexArray() {
-//
-//    }
-//
-//    private static String arrayToString(int[] Array) {
-//
-//    }
-//
-//    private static String arrayToString(String[] Array) {
-//
-//    }
 //
 //    public static char findIPClass(int[] ip_address) {
 //
 //    }
+    public static String integerToHexidecimal(int octet) {
+        String hexadecimal = "";
+        while(octet > 0) {
+            int temp = octet % 16;
+            octet /= 16;
+            switch(temp) {
+                case 10:
+                    hexadecimal = "A" + hexadecimal;
+                    break;
+                case 11:
+                    hexadecimal = "B" + hexadecimal;
+                    break;
+                case 12:
+                    hexadecimal = "C" + hexadecimal;
+                    break;
+                case 13:
+                    hexadecimal = "D" + hexadecimal;
+                    break;
+                case 14:
+                    hexadecimal = "E" + hexadecimal;
+                    break;
+                case 15:
+                    hexadecimal = "F" + hexadecimal;
+                    break;
+                default:
+                    hexadecimal = temp + hexadecimal;
+            }
+        }
+        if(hexadecimal.length() < 2) {
+            hexadecimal = 0 + hexadecimal;
+        }
+        return hexadecimal;
+    }
 
-    public static String integerToEightBitBinary(int integer) {
+    public static String integerToEightBitBinary(int octet) {
         String eight_bit_binary = "";
-        for(int i=128; integer > 0; i/=2)
+        for(int i=128; octet > 0; i/=2)
         {
-            eight_bit_binary += ((integer>=i) ? "1" : "0");
-            if(integer>=i)
-                integer-=i;
+            eight_bit_binary += ((octet>=i) ? "1" : "0");
+            if(octet>=i)
+                octet-=i;
         }
         while((8 - eight_bit_binary.length()) > 0) {
-            eight_bit_binary+="0";
+            eight_bit_binary += "0";
         }
         return eight_bit_binary;
     }
 
-//    public static String eightBitBinaryToInteger(String eightBitBinary) {
-//
-//    }
+    public static String addressArrayToString(String[] addressArray) {
+        String address = "";
+        for(int i = 0; i < addressArray.length; i++) {
+            if(i == (addressArray.length - 1)) {
+                address += addressArray[i];
+                continue;
+            }
+            address += addressArray[i] + ".";
+        }
+        return address;
+    }
 
+    public static char firstOctetRange(String[] address) {
+        if(Integer.parseInt(address[0]) >= 0 && Integer.parseInt(address[0]) <= 0) {
+            return 'A';
+        } else if(Integer.parseInt(address[0]) >= 128 && Integer.parseInt(address[0]) <= 191) {
+            return 'B';
+        } else {
+            return 'C';
+        }
+    }
+
+    public static String findWildcardMask(String subnet) {
+
+    }
 }
