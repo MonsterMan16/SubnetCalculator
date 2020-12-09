@@ -1,6 +1,5 @@
 package SubnetCalculator;
 
-import Networking.IP;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -31,11 +30,11 @@ public class SubnetCalculatorGUI {
     private static String column[] = {"Date & Time","IP ADDRESS","SUBNET MASK"};
 
     public SubnetCalculatorGUI() {
-        CalculatorGUI gui = new CalculatorGUI(new CalculatorProperies());
+        CalculatorGUI gui = new CalculatorGUI(new CalculatorProperties());
     }
 
     private class CalculatorGUI {
-        public CalculatorGUI(CalculatorProperies properies) {
+        public CalculatorGUI(CalculatorProperties properies) {
             initialiseUI();
         }
 

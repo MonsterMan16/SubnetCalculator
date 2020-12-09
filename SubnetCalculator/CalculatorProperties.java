@@ -1,17 +1,21 @@
 package SubnetCalculator;
 
-public class CalculatorProperies {
+import Networking.IP;
 
+import java.util.Arrays;
+import java.util.Properties;
+
+public final class CalculatorProperties {
 
     private char networkClass;
     private String[] ipAddress;
     private String[] binaryIPAddress; //
     private String[] subnetMask;
     private String[] binarySubnetAddress; //
+    private String[] hexadecimalSubnetAddress;
     private int subnetBits;
     private int maximumSubnets;
     private String firstOctetRange;
-    private String[] hexIPAddress;
     private String[] wildcardMask;
     private int maskBits;
     private int hostsPerSubnet;
@@ -20,9 +24,7 @@ public class CalculatorProperies {
     private String[] broadcastAddress;
     private String[] subnetBitmap;
 
-
-    public CalculatorProperies() {
-        setNetworkClass('A');
+    public CalculatorProperties() {
         setIpAddress(new String[]{"10","0","0","1"});
         setSubnetMask(new String[]{"255","0","0","0"});
     }
@@ -36,36 +38,36 @@ public class CalculatorProperies {
     }
 
     public String[] getIpAddress() {
-        return ipAddress;
+        return Arrays.copyOf(ipAddress,ipAddress.length);
     }
 
     public void setIpAddress(String[] ipAddress) {
+        setBinaryIPAddress(ipAddress);
         this.ipAddress = ipAddress;
     }
 
     public String[] getBinaryIPAddress() {
-        return binaryIPAddress;
+        return Arrays.copyOf(binaryIPAddress,binaryIPAddress.length);
     }
 
     private void setBinaryIPAddress(String[] binaryIPAddress) {
-        this.binaryIPAddress = binaryIPAddress;
+        this.binaryIPAddress = Arrays.copyOf(binaryIPAddress,binaryIPAddress.length);
     }
 
     public String[] getSubnetMask() {
-        return subnetMask;
+        return Arrays.copyOf(subnetMask,subnetMask.length);
     }
 
     public void setSubnetMask(String[] subnetMask) {
-        set
-        this.subnetMask = subnetMask;
+        this.subnetMask = Arrays.copyOf(subnetMask, subnetMask.length);
     }
 
     public String[] getBinarySubnetAddress() {
-        return binarySubnetAddress;
+        return Arrays.copyOf(binarySubnetAddress,binarySubnetAddress.length);
     }
 
     public void setBinarySubnetAddress(String[] binarySubnetAddress) {
-        this.binarySubnetAddress = binarySubnetAddress;
+        this.binarySubnetAddress = Arrays.copyOf(binarySubnetAddress,binarySubnetAddress.length);
     }
 
     public int getSubnetBits() {
@@ -92,16 +94,8 @@ public class CalculatorProperies {
         this.firstOctetRange = firstOctetRange;
     }
 
-    public String[] getHexIPAddress() {
-        return hexIPAddress;
-    }
-
-    public void setHexIPAddress(String[] hexIPAddress) {
-        this.hexIPAddress = hexIPAddress;
-    }
-
     public String[] getWildcardMask() {
-        return wildcardMask;
+        return Arrays.copyOf(wildcardMask,wildcardMask.length);
     }
 
     public void setWildcardMask(String[] wildcardMask) {
@@ -137,7 +131,7 @@ public class CalculatorProperies {
     }
 
     public void setSubnetID(String[] subnetID) {
-        this.subnetID = subnetID;
+        this.subnetID = Arrays.copyOf(wildcardMask,wildcardMask.length);
     }
 
     public String[] getBroadcastAddress() {
@@ -145,14 +139,48 @@ public class CalculatorProperies {
     }
 
     public void setBroadcastAddress(String[] broadcastAddress) {
-        this.broadcastAddress = broadcastAddress;
+        this.broadcastAddress = Arrays.copyOf(broadcastAddress,broadcastAddress.length);
     }
 
     public String[] getSubnetBitmap() {
-        return subnetBitmap;
+        return Arrays.copyOf(subnetBitmap,subnetBitmap.length);
     }
 
     public void setSubnetBitmap(String[] subnetBitmap) {
-        this.subnetBitmap = subnetBitmap;
+        this.subnetBitmap = Arrays.copyOf(subnetBitmap,subnetBitmap.length);
+    }
+
+    private static String integerToEightBitBinary(int octet) {
+        String eight_bit_binary = "";
+        for(int i=128; octet > 0; i/=2)
+        {
+            eight_bit_binary += ((octet>=i) ? "1" : "0");
+            if(octet>=i)
+                octet-=i;
+        }
+        while((8 - eight_bit_binary.length()) > 0) {
+            eight_bit_binary += "0";
+        }
+        return eight_bit_binary;
+    }
+
+    private static String[] integerArrayToBinaryArray(final String[] ip_address) {
+        String[] eight_bit_binary_address = new String[4];
+        for(int i = 0; i < ip_address.length; i++) {
+            eight_bit_binary_address[i] = IP.integerToEightBitBinary(Integer.parseInt(ip_address[i]));
+        }
+        return eight_bit_binary_address;
+    }
+
+    public static String addressArrayToString(String[] addressArray) {
+        String address = "";
+        for(int i = 0; i < addressArray.length; i++) {
+            if(i == (addressArray.length - 1)) {
+                address += addressArray[i];
+                continue;
+            }
+            address += addressArray[i] + ".";
+        }
+        return address;
     }
 }
