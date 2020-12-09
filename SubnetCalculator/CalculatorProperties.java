@@ -4,9 +4,12 @@ import Networking.IP;
 
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class CalculatorProperties {
 
+    private static final String IPV4_REGEX = "^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-4]?|[3-9]\\d?)$";
     private char networkClass;
     private String[] ipAddress;
     private String[] binaryIPAddress; //
@@ -182,5 +185,13 @@ public final class CalculatorProperties {
             address += addressArray[i] + ".";
         }
         return address;
+    }
+
+    public static boolean isValid(String ipAddress) {
+        Pattern compiledRegex = Pattern.compile(IPV4_REGEX);
+        // Using the matcher method provided by the regex package
+        Matcher check = compiledRegex.matcher(ipAddress);
+        boolean match = check.matches();
+        return match;
     }
 }

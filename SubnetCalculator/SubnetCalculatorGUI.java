@@ -3,6 +3,7 @@ package SubnetCalculator;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.*;
 
 public class SubnetCalculatorGUI {
     //Layouts
@@ -21,20 +22,17 @@ public class SubnetCalculatorGUI {
 
 
 
-    private static String[][] testData = {{"29/11/2020 21:51","192.168.1.254","255.255.255.0"},
-                                    {"29/11/2020 21:51","192.168.1.253","255.255.0.0"},
-                                    {"29/11/2020 21:51","192.168.1.252","255.0.0.0"},
-                                    {"29/11/2020 21:51","192.168.1.252","255.0.0.0"},
-                                    {"29/11/2020 21:51","192.168.1.252","255.0.0.0"}};
+    private static String[][] testData = {};
 
     private static String column[] = {"Date & Time","IP ADDRESS","SUBNET MASK"};
 
     public SubnetCalculatorGUI() {
-        CalculatorGUI gui = new CalculatorGUI(new CalculatorProperties());
+        new CalculatorGUI();
     }
 
-    private class CalculatorGUI {
-        public CalculatorGUI(CalculatorProperties properies) {
+
+    private class CalculatorGUI extends JFrame {
+        public CalculatorGUI() {
             initialiseUI();
         }
 
@@ -48,7 +46,8 @@ public class SubnetCalculatorGUI {
             //Setting the JFrame Size and Default Close Operation
             guiWindow.setSize(600,800);
             guiWindow.setResizable(false);
-            guiWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            guiWindow.addWindowListener(new SubnetCalculatorGUI.WindowEventHandler());
+            guiWindow.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
             // Create UI For GUI
             initialiseGUI();
             guiWindow.setVisible(true);
@@ -111,11 +110,17 @@ public class SubnetCalculatorGUI {
             subnetClassPanel.add(classB);
             subnetClassPanel.add(classC);
             networkProperiesLPanel.add(subnetClassPanel);
+            JLabel ipValid = new JLabel("IP Valid: ");
+            networkProperiesLPanel.add(ipValid);
             JLabel ipAddressLabel = new JLabel("IP Address");
             networkProperiesLPanel.add(ipAddressLabel);
             JTextField ipAddressTextField = new JTextField(15);
             ipAddressTextField.setMaximumSize(ipAddressTextField.getPreferredSize());
             networkProperiesLPanel.add(ipAddressTextField);
+            JButton subnetBtn = new JButton("SUBNET IT!");
+            subnetBtn.setMaximumSize(ipAddressTextField.getPreferredSize());
+            networkProperiesLPanel.add(subnetBtn);
+//            subnetBtn.addActionListener(ButtonEventHandler);
             JLabel subnetLabel = new JLabel("Subnet Mask");
             networkProperiesLPanel.add(subnetLabel);
             String classlessSubnets[] = {"255.0.0.0","255.255.0.0","255.255.255.0"};
@@ -210,5 +215,49 @@ public class SubnetCalculatorGUI {
             networkProperiesBottomPanel.add(subnetBitmapTextField);
             networkProperies.add(networkProperiesBottomPanel);
         }
+
+        private class ButtonEventHandler implements ActionListener {
+            public void actionPerformed(ActionEvent e) {
+//                CalculatorProperties.isValid(ipAddressLabel);
+            }
+        }
     }
+
+    private class WindowEventHandler implements WindowListener {
+
+        public void windowOpened(WindowEvent e) {
+            JOptionPane.showMessageDialog(null, "Welcome to Classless Subnet Calculator", "Welcome",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        public void windowClosing(WindowEvent e) {
+            int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to exit this application?", "Exiting Application Confirmation",
+                    JOptionPane.YES_NO_OPTION);
+
+            if(choice==JOptionPane.YES_OPTION)
+                guiWindow.dispose();
+            else
+                guiWindow.isVisible();
+        }
+
+        public void windowClosed(WindowEvent e) {
+        }
+
+
+        public void windowIconified(WindowEvent e) {
+        }
+
+
+        public void windowDeiconified(WindowEvent e) {
+        }
+
+
+        public void windowActivated(WindowEvent e) {
+        }
+
+
+        public void windowDeactivated(WindowEvent e) {
+        }
+    }
+
 }
